@@ -7,8 +7,10 @@ import InfoCard from "../components/InfoCard";
 import Pagination from "../components/Pagination";
 
 function search({ searchResults }) {
-  const router = useRouter();
-  const { location, startDate, endDate, noOfGuests } = router.query;
+    // eslint-disable-next-line react-hooks/rules-of-hooks
+    const Router = useRouter();
+ 
+  const { location, startDate, endDate, noOfGuests } = Router.query;
   const formattedStartDate = format(new Date(startDate), "dd MMMM yy");
   const formattedEndDate = format(new Date(endDate), "dd MMMM yy");
   const range = `${formattedStartDate}-${formattedEndDate}`;
