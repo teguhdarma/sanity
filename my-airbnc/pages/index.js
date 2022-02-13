@@ -5,10 +5,11 @@ import Header from "../components/Header";
 import LargeCard from "../components/LargeCard";
 import MediumCard from "../components/MediumCard";
 import SmallCard from "../components/SmallCard";
+import Link from "next/link";
+import App from "../components/Map";
 
-import styles from "../styles/Home.module.css";
 
-export default function Home({ exploreData, cardsData }) {
+export default function Home({ exploreData, cardsData, externalPostData }) {
   return (
     <div>
       <Head>
@@ -37,22 +38,34 @@ export default function Home({ exploreData, cardsData }) {
           </div>
         </section>
         <section>
-          <h2 className="text-4xl font-semibold py-8">live Anywhere</h2>
+          <h2 className="text-4xl font-semibold py-8">fasilitas</h2>
           <div className="flex space-x-3 overflow-scroll scrollbar-hide p-3">
-          {cardsData?.map(({ img, title }) => (
-            <MediumCard key={img} img={img} title={title} />
-          ))}
+            {cardsData?.map(({ id, mainUrl }) => (
+              <MediumCard key={id} img={mainUrl}  />
+            ))}
           </div>
-          
         </section>
         <LargeCard
-        img="https://Links.papareact.com/4cj"
-        title="the greatest Outdoors"
-        desciption="wishlists curated by airbnb"
-        buttonText="Get Inspired"
+          img="https://Links.papareact.com/4cj"
+          title="the greatest Outdoors"
+          desciption="wishlists curated by airbnb"
+          buttonText="Get Inspired"
         />
+        {externalPostData.map((data) => {
+          return (
+            <div key={data.id}>
+              <Link href={data.link}>
+                <h3>{data.title}</h3>
+              </Link>
+              <p>{data.body}</p>
+            </div>
+          );
+        })}
+         <section className="hidden xl:inline-flex xl:min-w-[600px]">
+            <App/>
+        </section>
       </main>
-      <Footer/>
+      <Footer />
     </div>
   );
 }
@@ -60,13 +73,27 @@ export async function getStaticProps() {
   const exploreData = await fetch("https://links.papareact.com/pyp").then(
     (res) => res.json()
   );
-  const cardsData = await fetch("https://links.papareact.com/zp1").then((res) =>
-    res.json()
-  );
+  const cardsData = await fetch(
+    "https://hotels-com-provider.p.rapidapi.com/v1/hotels/photos?hotel_id=363464",
+    {
+      method: "GET",
+      headers: {
+        "x-rapidapi-host": "hotels-com-provider.p.rapidapi.com",
+        "x-rapidapi-key": "1986c8e022msh1534cf98bff4ec1p19e90djsn31884e72df1c",
+      },
+    }
+  ).then((res) => res.json());
+  const apiURL = "http://localhost:3004/posts";
+
+  const response = await fetch(apiURL);
+
+  const data = await response.json();
+
   return {
     props: {
       exploreData,
       cardsData,
+      externalPostData: data,
     },
   };
 }

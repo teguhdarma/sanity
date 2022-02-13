@@ -5,8 +5,11 @@ import { useRouter } from "next/router";
 import format from "date-fns/format";
 import InfoCard from "../components/InfoCard";
 import Pagination from "../components/Pagination";
+import App from "../components/Map";
 
-function search({ searchResults }) {
+
+
+function search({ select }) {
     // eslint-disable-next-line react-hooks/rules-of-hooks
     const Router = useRouter();
  
@@ -14,6 +17,7 @@ function search({ searchResults }) {
   const formattedStartDate = format(new Date(startDate), "dd MMMM yy");
   const formattedEndDate = format(new Date(endDate), "dd MMMM yy");
   const range = `${formattedStartDate}-${formattedEndDate}`;
+
   return (
     <div>
       <Header placeholder={`${location} | ${range} | ${noOfGuests}guests`} />
@@ -33,23 +37,22 @@ function search({ searchResults }) {
             <p className="button">More filters</p>
           </div>
           {/* render info card */}
-          <div className="flex flex-col">
-            {searchResults.map(
-              ({ img, location, title, description, star, price, total }) => (
-                <InfoCard
-                  key={img}
-                  img={img}
-                  location={location}
-                  title={title}
-                  description={description}
-                  star={star}
-                  price={price}
-                  total={total}
-                />
-              )
-            )}
-          </div>
+          <div>
+          {select.data.map(item => (
+              <InfoCard
+                key={item.data}
+                img={item.result_object.photo.images.medium.url}
+                title={item.result_object.name}
+                location={item.result_object.address}
+                star={item.result_object.rating}
+              />
+            ))}
+      </div>
         </section>
+        <section className="hidden xl:inline-flex xl:min-w-[600px]">
+            <App/>
+        </section>
+       
       </main>
       <Pagination/>
       <Footer />
@@ -59,13 +62,21 @@ function search({ searchResults }) {
 
 export default search;
 
-export async function getServerSideProps() {
-  const searchResults = await fetch("https://links.papareact.com/isz").then(
+export async function getServerSideProps(context) {
+const location = context.query.location
+  const url = "https://travel-advisor.p.rapidapi.com/locations/search?query="+location+"&limit=30&offset=0&units=km&location_id=1&currency=USD&sort=relevance&lang=en_US"
+  const select = await fetch(url, {
+	"method": "GET",
+	"headers": {
+		"x-rapidapi-host": "travel-advisor.p.rapidapi.com",
+		"x-rapidapi-key": "1986c8e022msh1534cf98bff4ec1p19e90djsn31884e72df1c"
+	}
+}).then(
     (res) => res.json()
   );
   return {
     props: {
-      searchResults,
+      select
     },
   };
 }

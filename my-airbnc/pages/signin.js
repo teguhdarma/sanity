@@ -1,11 +1,9 @@
 import React from 'react';
 import SigninPage from '../components/SigninPage';
 
-
 function signin() {
   return <div>
-     
-      <SigninPage/>
+    <SigninPage/>s
   </div>;
 }
 
