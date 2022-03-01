@@ -9,7 +9,7 @@ import App from "../components/Map";
 
 
 
-function search({ select }) {
+function search({ select,map }) {
     // eslint-disable-next-line react-hooks/rules-of-hooks
     const Router = useRouter();
  
@@ -40,7 +40,8 @@ function search({ select }) {
           <div>
           {select.data.map(item => (
               <InfoCard
-                key={item.data}
+                key={item.id}
+                id={item.location_id}
                 img={item.result_object.photo.images.medium.url}
                 title={item.result_object.name}
                 location={item.result_object.address}
@@ -50,7 +51,7 @@ function search({ select }) {
       </div>
         </section>
         <section className="hidden xl:inline-flex xl:min-w-[600px]">
-            <App/>
+           <App select={select}/>
         </section>
        
       </main>
@@ -69,14 +70,18 @@ const location = context.query.location
 	"method": "GET",
 	"headers": {
 		"x-rapidapi-host": "travel-advisor.p.rapidapi.com",
-		"x-rapidapi-key": "1986c8e022msh1534cf98bff4ec1p19e90djsn31884e72df1c"
+		"x-rapidapi-key": "08f6102a57msh5971be4c6402572p1e116ejsn5966a16c4d29"
 	}
 }).then(
     (res) => res.json()
   );
+  const map = await fetch ("https://api.mapbox.com/geocoding/v5/mapbox.places/"+location+".json?types=place%2Cpostcode%2Caddress&access_token=pk.eyJ1IjoidGVndWhkYXJtYSIsImEiOiJja3psNjRneWsxNHQ1Mm5ueXh2dThpY2xuIn0.EOP9mO-H8NKTAW6jcvX7KQ").then(
+    (res) => res.json()
+  );
   return {
     props: {
-      select
+      select,
+      map
     },
   };
 }

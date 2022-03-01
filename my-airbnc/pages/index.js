@@ -6,7 +6,7 @@ import LargeCard from "../components/LargeCard";
 import MediumCard from "../components/MediumCard";
 import SmallCard from "../components/SmallCard";
 import Link from "next/link";
-import App from "../components/Map";
+
 
 
 export default function Home({ exploreData, cardsData, externalPostData }) {
@@ -51,7 +51,7 @@ export default function Home({ exploreData, cardsData, externalPostData }) {
           desciption="wishlists curated by airbnb"
           buttonText="Get Inspired"
         />
-        {externalPostData.map((data) => {
+        {/* {externalPostData.map((data) => {
           return (
             <div key={data.id}>
               <Link href={data.link}>
@@ -60,10 +60,8 @@ export default function Home({ exploreData, cardsData, externalPostData }) {
               <p>{data.body}</p>
             </div>
           );
-        })}
-         <section className="hidden xl:inline-flex xl:min-w-[600px]">
-            <App/>
-        </section>
+        })} */}
+ 
       </main>
       <Footer />
     </div>
@@ -83,17 +81,17 @@ export async function getStaticProps() {
       },
     }
   ).then((res) => res.json());
-  const apiURL = "http://localhost:3004/posts";
+//   const apiURL = "http://localhost:3004/posts";
 
-  const response = await fetch(apiURL);
+//   const response = await fetch(apiURL);
 
-  const data = await response.json();
+//   const data = await response.json();
 
   return {
     props: {
       exploreData,
       cardsData,
-      externalPostData: data,
+    //   externalPostData: data,
     },
   };
 }
