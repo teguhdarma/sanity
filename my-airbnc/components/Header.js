@@ -55,12 +55,7 @@ function Header({ placeholder }) {
         onClick={() => router.push("/")}
         className="relative flex items-center h-10 cursor-pointer my-auto"
       >
-        <Image
-          src="https://links.papareact.com/qd3"
-          layout="fill"
-          objectFit="contain"
-          objectPosition="left"
-        />
+        <img src="/your-logo.png" alt="My Image" className="logo" />
       </div>
       {/* middle search bar*/}
       <div className="flex items-center md:border-2 rounded-full py-2 md:shadow-sm ">
